@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4B594F58-BCFD-4E80-A893-F1BB34711681}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{013E12B6-6CB2-41B6-B9FA-6CDAB0F443A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{9EA4119A-01AB-45AB-B42E-DADE7B9E954C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{05FBFB75-7ABA-4BE9-AD13-92894A167E31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMart.WebApp", "VMart.WebApp\VMart.WebApp.csproj", "{CF5B7334-DD46-4C05-A587-05266B29FCD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMart.AuthAPI", "VMart.AuthAPI\VMart.AuthAPI.csproj", "{02FD973D-D3FD-43A3-A3A2-C560E623F4F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMart.MessageBus", "VMart.MessageBus\VMart.MessageBus.csproj", "{B10C0BF3-1DBB-4672-9400-17AD007D89EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF5B7334-DD46-4C05-A587-05266B29FCD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF5B7334-DD46-4C05-A587-05266B29FCD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF5B7334-DD46-4C05-A587-05266B29FCD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF5B7334-DD46-4C05-A587-05266B29FCD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02FD973D-D3FD-43A3-A3A2-C560E623F4F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02FD973D-D3FD-43A3-A3A2-C560E623F4F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02FD973D-D3FD-43A3-A3A2-C560E623F4F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02FD973D-D3FD-43A3-A3A2-C560E623F4F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B10C0BF3-1DBB-4672-9400-17AD007D89EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B10C0BF3-1DBB-4672-9400-17AD007D89EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B10C0BF3-1DBB-4672-9400-17AD007D89EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B10C0BF3-1DBB-4672-9400-17AD007D89EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CF5B7334-DD46-4C05-A587-05266B29FCD6} = {05FBFB75-7ABA-4BE9-AD13-92894A167E31}
+		{02FD973D-D3FD-43A3-A3A2-C560E623F4F6} = {4B594F58-BCFD-4E80-A893-F1BB34711681}
+		{B10C0BF3-1DBB-4672-9400-17AD007D89EC} = {9EA4119A-01AB-45AB-B42E-DADE7B9E954C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4E1736B-644E-4D5C-A8B2-35B3AF4A7631}
+	EndGlobalSection
+EndGlobal

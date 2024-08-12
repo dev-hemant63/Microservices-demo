@@ -1,0 +1,6 @@
+@VMart.AuthAPI_HostAddress = http://localhost:5172
+
+GET {{VMart.AuthAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
