@@ -7,7 +7,7 @@ using VMart.AuthAPI.Models.Dto;
 
 namespace VMart.AuthAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -24,8 +24,8 @@ namespace VMart.AuthAPI.Controllers
             _mapper = mapper;
             _roleManager = roleManager;
         }
-        [HttpPost(nameof(Create))]
-        public async Task<IActionResult> Create(UserRegistrationReq registrationReq)
+        [HttpPost(nameof(create))]
+        public async Task<IActionResult> create(UserRegistrationReq registrationReq)
         {
             try
             {
@@ -70,6 +70,31 @@ namespace VMart.AuthAPI.Controllers
         [HttpPost(nameof(Login))]
         public async Task<IActionResult> Login(LoginRequestDto loginRequest)
         {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(loginRequest.UserName);
+                if (user != null)
+                {
+                    var signInRes = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password,true);
+                    if (signInRes.Succeeded)
+                    {
+
+                    }
+                    else
+                    {
+                        _responseDto.Message = "Invalid username or password.";
+                    }
+                }
+                else
+                {
+                    _responseDto.Message = "Sorry,User not found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
             return Ok(_responseDto);
         }
     }

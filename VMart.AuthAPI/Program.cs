@@ -1,7 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using VMart.AuthAPI.Data;
 using VMart.AuthAPI.Extentions;
 using VMart.AuthAPI.Models;
