@@ -11,6 +11,7 @@ namespace VMart.AuthAPI.Extentions
             var config = new MapperConfiguration(config =>
             {
                 config.CreateMap<UserRegistrationReq, ApplicationUser>();
+                config.CreateMap<ApplicationUser,LoginResponseDto>();
                 config.CreateMap<ApplicationUser, UserRegistrationReq>();
             });
             return config;

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using VMart.AuthAPI.Models;
 using VMart.AuthAPI.Models.Dto;
+using VMart.AuthAPI.Repository.Interfaces;
 
 namespace VMart.AuthAPI.Controllers
 {
@@ -16,13 +19,17 @@ namespace VMart.AuthAPI.Controllers
         private ResponseDto _responseDto;
         private readonly IMapper _mapper;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMapper mapper, RoleManager<ApplicationRole> roleManager)
+        private readonly ITokenGenerator _tokenGenerator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMapper mapper, RoleManager<ApplicationRole> roleManager, ITokenGenerator tokenGenerator, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _responseDto = new ResponseDto { Message = "Sorry,Something went wrong try after sometime.", Result = null };
             _mapper = mapper;
             _roleManager = roleManager;
+            _tokenGenerator = tokenGenerator;
+            _httpContextAccessor = httpContextAccessor;
         }
         [HttpPost(nameof(create))]
         public async Task<IActionResult> create(UserRegistrationReq registrationReq)
@@ -75,10 +82,34 @@ namespace VMart.AuthAPI.Controllers
                 var user = await _userManager.FindByEmailAsync(loginRequest.UserName);
                 if (user != null)
                 {
-                    var signInRes = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password,true);
+                    var signInRes = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, true);
                     if (signInRes.Succeeded)
                     {
+                        var loginRes = _mapper.Map<LoginResponseDto>(user);
+                        var userRole = await _userManager.GetRolesAsync(user);
+                        List<Claim> claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name,user.Name ?? ""),
+                            new Claim(ClaimTypes.MobilePhone,user.PhoneNumber ?? ""),
+                            new Claim(ClaimTypes.Email,user.Email ?? ""),
+                        };
+                        foreach (var item in userRole)
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, item??""));
+                        }
+                        loginRes.Token = await _tokenGenerator.GenerateTokenAsync(claims);
+                        var identity = new ClaimsIdentity(claims, "Cookies");
+                        var property = new AuthenticationProperties
+                        {
+                            ExpiresUtc = DateTime.UtcNow.AddDays(7),
+                            IsPersistent = true,
+                            AllowRefresh = false
+                        };
+                        await _httpContextAccessor.HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(identity), property);
 
+                        _responseDto.IsSuccess = true;
+                        _responseDto.Message = "Login Susscessfully.";
+                        _responseDto.Result = loginRes;
                     }
                     else
                     {

@@ -10,5 +10,6 @@ namespace VMart.AuthAPI.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+        
     }
 }

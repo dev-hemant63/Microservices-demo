@@ -1,0 +1,6 @@
+@VMart.Services.Category_HostAddress = http://localhost:5295
+
+GET {{VMart.Services.Category_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
