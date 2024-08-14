@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VMart.Services.Category.Data;
@@ -9,6 +10,7 @@ namespace VMart.Services.Category.Controllers
 {
     [Route("api/category")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class CategoryController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
@@ -59,7 +61,6 @@ namespace VMart.Services.Category.Controllers
                 await _appDbContext.SaveChangesAsync();
                 _response.IsSuccess = true;
                 _response.Message = "Request Completed Successfully.";
-                _response.Result = res;
             }
             catch (Exception ex)
             {
@@ -77,7 +78,6 @@ namespace VMart.Services.Category.Controllers
                 await _appDbContext.SaveChangesAsync();
                 _response.IsSuccess = true;
                 _response.Message = "Request Completed Successfully.";
-                _response.Result = res;
             }
             catch (Exception ex)
             {
