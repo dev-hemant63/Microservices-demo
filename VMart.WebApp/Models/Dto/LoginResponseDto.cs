@@ -1,4 +1,4 @@
-﻿namespace VMart.AuthAPI.Models.Dto
+﻿namespace VMart.WebApp.Models.Dto
 {
     public class LoginResponseDto
     {

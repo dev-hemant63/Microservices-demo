@@ -1,8 +1,17 @@
+using System.Threading.RateLimiting;
+using VMart.WebApp.Services;
+using VMart.WebApp.Services.IServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IRequestBase, RequestBase>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IAuthServices, AuthServices>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddHttpClient();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -13,7 +13,7 @@ namespace VMart.Services.ProductAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ProductController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
@@ -28,6 +28,7 @@ namespace VMart.Services.ProductAPI.Controllers
             _fileUploadService = fileUploadService;
         }
         [HttpGet]
+        [AllowAnonymous]
         public async Task<object> Get()
         {
             try

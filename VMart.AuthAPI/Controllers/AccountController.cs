@@ -96,6 +96,7 @@ namespace VMart.AuthAPI.Controllers
                         foreach (var item in userRole)
                         {
                             claims.Add(new Claim(ClaimTypes.Role, item??""));
+                            loginRes.Role.Add(item);
                         }
                         loginRes.Token = await _tokenGenerator.GenerateTokenAsync(claims);
                         var identity = new ClaimsIdentity(claims, "Cookies");

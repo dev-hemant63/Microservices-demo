@@ -1,21 +1,58 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VMart.WebApp.Models;
+using VMart.WebApp.Models.Dto;
+using VMart.WebApp.Services.IServices;
+using VMart.WebApp.Utility;
 
 namespace VMart.WebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IProductService _productService;
+        private readonly IAuthServices _authServices;
+        public HomeController(ILogger<HomeController> logger, IProductService productService, IAuthServices authServices)
         {
             _logger = logger;
+            _productService = productService;
+            _authServices = authServices;
         }
-
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetProduct()
+        {
+            var res = await _productService.GetAsync();
+            return Json(res);
+        }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View(new LoginRequestDto { });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequestDto loginRequestDto)
+        {
+            var res = await _authServices.Login(loginRequestDto);
+            if (res.IsSuccess)
+            {
+                var cookieOptions = new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddDays(7)
+                };
+                Response.Cookies.Append("Name", res.Result.Name, cookieOptions);
+                Response.Cookies.Append("Email", res.Result.Email, cookieOptions);
+                Response.Cookies.Append("Token", res.Result.Token, cookieOptions);
+                foreach (var item in res.Result.Role)
+                {
+                    Response.Cookies.Append("Role", item, cookieOptions);
+                }
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

@@ -1,8 +1,48 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">Punny headline</h1>
+        <p class="lead font-weight-normal">And an even wittier subheading to boot. Jumpstart your marketing efforts with this example based on Apple's marketing pages.</p>
+        <a class="btn btn-outline-secondary" href="#">Coming soon</a>
+    </div>
+    <div class="product-device shadow-sm d-none d-md-block"></div>
+    <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
 </div>
+<div class="row" id="productSection">
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadProducts();
+        });
+        const loadProducts = () => {
+            $.post('/Home/GetProduct').done(function (res) {
+                if (res.isSuccess) {
+                    let _html = res.result.map((v, i) => {
+                        return `<div class="col-sm-3 mb-3">
+                                <div class="card">
+                          <img class="card-img-top" src="${v.productImage}" alt="Card image cap">
+          <div class="card-body">
+                                                    <h5 class="card-title">${v.product_Name} ₹${v.price}</h5>
+                            <p class="card-text">${v.description}</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div></div>`;
+                    });
+                    $('#productSection').empty().append(_html);
+                }
+                else{
+                    let _html = `<div class="alert alert-warning" role="alert">
+          This is a warning alert—check it out!
+        </div>`;
+                    $('#productSection').empty().append(_html);
+                }
+                
+            }).fail(function (xhr) {
+                console.log(xhr);
+            });
+        }
+    </script>
+}
