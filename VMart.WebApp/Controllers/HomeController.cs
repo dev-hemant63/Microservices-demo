@@ -51,8 +51,11 @@ namespace VMart.WebApp.Controllers
                 {
                     Response.Cookies.Append("Role", item, cookieOptions);
                 }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            ViewBag.Message = res.Message;
+            ViewBag.Code = res.IsSuccess == true ? 200 : 500;
+            return RedirectToAction("Login");
         }
 
         public IActionResult Privacy()
