@@ -13,7 +13,7 @@ namespace VMart.Services.ProductAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer",Roles ="Admin")]
     public class ProductController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;

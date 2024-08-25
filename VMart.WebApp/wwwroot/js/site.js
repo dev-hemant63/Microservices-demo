@@ -141,7 +141,7 @@
         });
     }
 
-    modal(title, body, size) {
+    modal(title, body, size, callback) {
         let hight = 500;
         let width = 500;
         if (size == 'small') {
@@ -157,11 +157,20 @@
             width = 1500;
         }
         $(`<div id="dialog" title="${title}">${body}</div>`).appendTo("body");
-        $("#dialog").dialog({
+        var dialog = $("#dialog").dialog({
             width: width,
             hight: hight,
             modal: true,
             draggable: false,
+            buttons: {
+                "Ok": function () {
+                    callback();
+                    dialog.dialog("close");
+                },
+                "Cancel": function () {
+                    dialog.dialog("close");
+                }
+            }
         });
     }
 

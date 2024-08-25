@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VMart.WebApp.Models;
@@ -23,6 +24,7 @@ namespace VMart.WebApp.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         public async Task<IActionResult> GetProduct()
         {
@@ -51,13 +53,38 @@ namespace VMart.WebApp.Controllers
                 {
                     Response.Cookies.Append("Role", item, cookieOptions);
                 }
-                return RedirectToAction("Index");
+                if (res.Result.Role.Any(x => x.Equals("Admin")))
+                {
+                    return Redirect("/Admin/Index");
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
             ViewBag.Message = res.Message;
             ViewBag.Code = res.IsSuccess == true ? 200 : 500;
             return RedirectToAction("Login");
         }
-
+        [HttpGet]
+        public async Task<IActionResult> Register()
+        {
+            return View(new RegisterRequestDto());
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequestDto registerRequestDto)
+        {
+            var res = await _authServices.Register(registerRequestDto);
+            if (res.IsSuccess)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return View(registerRequestDto);
+            }
+        }
+        
         public IActionResult Privacy()
         {
             return View();

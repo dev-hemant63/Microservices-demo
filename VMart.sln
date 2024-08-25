@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VMart.Services.AuthAPI", "V
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VMart.MessageBus", "VMart.MessageBus\VMart.MessageBus.csproj", "{B10C0BF3-1DBB-4672-9400-17AD007D89EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMart.Services.ProductAPI", "VMart.Services.ProductAPI\VMart.Services.ProductAPI.csproj", "{19F44939-7B6E-4644-B187-C7D5673A10A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VMart.Services.ProductAPI", "VMart.Services.ProductAPI\VMart.Services.ProductAPI.csproj", "{19F44939-7B6E-4644-B187-C7D5673A10A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMart.Services.Category", "VMart.Services.Category\VMart.Services.Category.csproj", "{7DE20FDA-5CEA-4DDB-B10C-BB2FAEF31626}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VMart.Services.Category", "VMart.Services.Category\VMart.Services.Category.csproj", "{7DE20FDA-5CEA-4DDB-B10C-BB2FAEF31626}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMart.Services.EmailAPI", "VMart.Services.EmailAPI\VMart.Services.EmailAPI.csproj", "{6E66B76F-3D16-4714-8417-38F4B7AE3B00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{7DE20FDA-5CEA-4DDB-B10C-BB2FAEF31626}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DE20FDA-5CEA-4DDB-B10C-BB2FAEF31626}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DE20FDA-5CEA-4DDB-B10C-BB2FAEF31626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E66B76F-3D16-4714-8417-38F4B7AE3B00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E66B76F-3D16-4714-8417-38F4B7AE3B00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E66B76F-3D16-4714-8417-38F4B7AE3B00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E66B76F-3D16-4714-8417-38F4B7AE3B00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{B10C0BF3-1DBB-4672-9400-17AD007D89EC} = {9EA4119A-01AB-45AB-B42E-DADE7B9E954C}
 		{19F44939-7B6E-4644-B187-C7D5673A10A3} = {4B594F58-BCFD-4E80-A893-F1BB34711681}
 		{7DE20FDA-5CEA-4DDB-B10C-BB2FAEF31626} = {4B594F58-BCFD-4E80-A893-F1BB34711681}
+		{6E66B76F-3D16-4714-8417-38F4B7AE3B00} = {4B594F58-BCFD-4E80-A893-F1BB34711681}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A4E1736B-644E-4D5C-A8B2-35B3AF4A7631}

@@ -129,5 +129,31 @@ namespace VMart.AuthAPI.Controllers
             }
             return Ok(_responseDto);
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateRole(string roleName)
+        {
+            try
+            {
+                var roleRes = await _roleManager.CreateAsync(new ApplicationRole
+                {
+                    Name = roleName,
+                    NormalizedName = roleName.ToUpper(),
+                });
+                if (roleRes.Succeeded)
+                {
+                    _responseDto.IsSuccess = true;
+                }
+                else
+                {
+                    _responseDto.Message = roleRes.Errors.FirstOrDefault().Description;
+                }
+            }
+            catch (Exception ex)
+            {
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
+            return Ok(_responseDto);
+        }
     }
 }

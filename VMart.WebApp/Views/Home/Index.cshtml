@@ -16,9 +16,6 @@
     <script>
         $(document).ready(function () {
             loadProducts();
-            if (@ViewBag("Message") != null) {
-                helper.alert(@ViewBag("Code"), @ViewBag("Message"));
-            }
         });
         const loadProducts = () => {
             $.post('/Home/GetProduct').done(function (res) {
@@ -30,7 +27,8 @@
           <div class="card-body">
                                                     <h5 class="card-title">${v.product_Name} ₹${v.price}</h5>
                             <p class="card-text">${v.description}</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <a href="javascript:void(0)" class="btn btn-outline-info">Add To Cart</a>
+                    <a href="javascript:void(0)" class="btn btn-outline-success">CheckOut</a>
           </div>
         </div></div>`;
                     });
@@ -38,7 +36,7 @@
                 }
                 else{
                     let _html = `<div class="alert alert-warning" role="alert">
-          This is a warning alert—check it out!
+          Product Not Found!
         </div>`;
                     $('#productSection').empty().append(_html);
                 }

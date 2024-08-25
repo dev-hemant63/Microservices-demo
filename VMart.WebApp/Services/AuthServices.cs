@@ -22,5 +22,16 @@ namespace VMart.WebApp.Services
             
             return res;
         }
+        public async Task<ResponseDto<object>> Register(RegisterRequestDto registerRequestDto)
+        {
+            var res = await _requestBase.SendAsync<object>(new RequestDto
+            {
+                Url = "https://localhost:7039/api/account/create",
+                RequestType = RequestType.POST,
+                RequestBody = registerRequestDto
+            });
+
+            return res;
+        }
     }
 }

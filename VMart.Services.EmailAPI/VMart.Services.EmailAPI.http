@@ -1,0 +1,6 @@
+@VMart.Services.EmailAPI_HostAddress = http://localhost:5108
+
+GET {{VMart.Services.EmailAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
