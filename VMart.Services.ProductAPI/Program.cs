@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using VMart.MessageBus.Services.IService;
+using VMart.MessageBus.Services;
 using VMart.Services.ProductAPI.Data;
 using VMart.Services.ProductAPI.Extentions;
 using VMart.Services.ProductAPI.Services;
@@ -15,7 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<IRabbitMQService, RabbitMQService>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 builder.Services.AddEndpointsApiExplorer();
 IMapper mapper = MappingConfig.RegisterMap().CreateMapper();
 builder.Services.AddSingleton(mapper);

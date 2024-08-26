@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using VMart.MessageBus.Services.IService;
 using VMart.Services.ProductAPI.Data;
 using VMart.Services.ProductAPI.Models;
 using VMart.Services.ProductAPI.Models.Dto;
@@ -20,12 +22,14 @@ namespace VMart.Services.ProductAPI.Controllers
         private readonly ResponseDto _response;
         private readonly IMapper _mapper;
         private readonly IFileUploadService _fileUploadService;
-        public ProductController(AppDbContext appDbContext, IMapper mapper, IFileUploadService fileUploadService)
+        private readonly IMessageBus _messageBus;
+        public ProductController(AppDbContext appDbContext, IMapper mapper, IFileUploadService fileUploadService, IMessageBus messageBus)
         {
             _appDbContext = appDbContext;
             _response = new ResponseDto { Message = "Sorry,Something went wrong try aftersome." };
             _mapper = mapper;
             _fileUploadService = fileUploadService;
+            _messageBus = messageBus;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -142,6 +146,25 @@ namespace VMart.Services.ProductAPI.Controllers
             {
                 _response.Message = ex.Message;
             }
+            return _response;
+        }
+        [HttpPost(nameof(PlaceOrder))]
+        [AllowAnonymous]
+        public async Task<object> PlaceOrder()
+        {
+            var emailDto = new EmailDto
+            {
+                to = "amarnag702@gmail.com",
+                subject = "Test RabbitMQ",
+                body = "This for testing for rabbit mq message bus."
+            };
+            _messageBus.PublishMessage(new MessageBus.Models.Dto.PublishMessageDto
+            {
+                Exchange = "Email-Exchange",
+                RoutingKey = "Email-Exchange-Key",
+                Queue = "Email-Provider-Queue",
+                Message = JsonConvert.SerializeObject(emailDto)
+            });
             return _response;
         }
     }
