@@ -9,6 +9,10 @@ namespace VMart.MessageBus.Services
     public class RabbitMQService : IRabbitMQService
     {
         private readonly ResponseDto _response;
+        public RabbitMQService()
+        {
+            _response = new ResponseDto { Message = ""};
+        }
         public async Task<ResponseDto> PublishMessage(PublishMessageDto publishMessage)
         {
             try
