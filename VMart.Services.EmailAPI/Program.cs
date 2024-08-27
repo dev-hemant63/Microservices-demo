@@ -1,6 +1,3 @@
-using VMart.MessageBus.Services;
-using VMart.MessageBus.Services.IService;
-using VMart.Services.EmailAPI.Extentions;
 using VMart.Services.EmailAPI.Services;
 using VMart.Services.EmailAPI.Services.IService;
 
@@ -13,8 +10,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEmailProvider, EmailProvider>();
-builder.Services.AddScoped<IRabbitMQService, RabbitMQService>();
-builder.Services.AddScoped<IMessageBus, MessageBus>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,7 +18,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseConsumeRabbitMQMessage();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

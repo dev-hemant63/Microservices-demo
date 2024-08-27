@@ -1,4 +1,6 @@
-﻿using VMart.WebApp.Models;
+﻿using System.Net.Http.Headers;
+using System.Text;
+using VMart.WebApp.Models;
 using VMart.WebApp.Models.Dto;
 using VMart.WebApp.Services.IServices;
 using VMart.WebApp.Utility;
@@ -18,9 +20,63 @@ namespace VMart.WebApp.Services
         {
             var res = await _requestBase.SendAsync<List<Products>>(new RequestDto
             {
-                Url = "https://localhost:7127/api/Product",
+                Url = "https://localhost:7083/gateway/api/Product",
                 RequestType = RequestType.GET,
                 Token = await _tokenProvider.GetToken()
+            });
+            return res;
+        }
+        public async Task<ResponseDto<Products>> GetByIdAsync(int Id)
+        {
+            var res = await _requestBase.SendAsync<Products>(new RequestDto
+            {
+                Url = $"https://localhost:7083/gateway/api/Product/{Id}",
+                RequestType = RequestType.GET,
+                Token = await _tokenProvider.GetToken()
+            });
+            return res;
+        }
+        public async Task<ResponseDto<Products>> DeleteAsync(int Id)
+        {
+            var res = await _requestBase.SendAsync<Products>(new RequestDto
+            {
+                Url = $"https://localhost:7083/gateway/api/Product/{Id}",
+                RequestType = RequestType.DELETE,
+                Token = await _tokenProvider.GetToken()
+            });
+            return res;
+        }
+        public async Task<ResponseDto<object>> AddAsync(AddProductDto addProductDto)
+        {
+            var multipartContent = new MultipartFormDataContent();
+
+            multipartContent.Add(new StringContent(addProductDto.Id.ToString()), nameof(addProductDto.Id));
+            multipartContent.Add(new StringContent(addProductDto.CategoryId.ToString()), nameof(addProductDto.CategoryId));
+            multipartContent.Add(new StringContent(addProductDto.Product_Name.ToString()), nameof(addProductDto.Product_Name));
+            multipartContent.Add(new StringContent(addProductDto.Price.ToString()), nameof(addProductDto.Price));
+            multipartContent.Add(new StringContent(addProductDto.Description.ToString()), nameof(addProductDto.Description));
+
+            using (var stream = addProductDto.ProductImage.OpenReadStream())
+            {
+                using (var reader = new BinaryReader(stream))
+                {
+                    var fileContent = new ByteArrayContent(reader.ReadBytes((int)stream.Length));
+                    fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream"); // or the actual MIME type of the file
+                    fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                    {
+                        Name = "\"ProductImage\"",
+                        FileName = $"\"{addProductDto.ProductImage.FileName}\""
+                    };
+
+                    multipartContent.Add(fileContent, "ProductImage");
+                }
+            }
+            var res = await _requestBase.SendAsync<object>(new RequestDto
+            {
+                Url = "https://localhost:7083/gateway/api/Product",
+                RequestType = RequestType.POST,
+                Token = await _tokenProvider.GetToken(),
+                RequestBody = multipartContent
             });
             return res;
         }

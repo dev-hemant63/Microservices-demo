@@ -1,35 +1,29 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using VMart.MessageBus.Services.IService;
 using VMart.Services.ProductAPI.Data;
 using VMart.Services.ProductAPI.Models;
 using VMart.Services.ProductAPI.Models.Dto;
 using VMart.Services.ProductAPI.Services.IServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VMart.Services.ProductAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer",Roles ="Admin")]
+    [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
     public class ProductController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
         private readonly ResponseDto _response;
         private readonly IMapper _mapper;
         private readonly IFileUploadService _fileUploadService;
-        private readonly IMessageBus _messageBus;
-        public ProductController(AppDbContext appDbContext, IMapper mapper, IFileUploadService fileUploadService, IMessageBus messageBus)
+        public ProductController(AppDbContext appDbContext, IMapper mapper, IFileUploadService fileUploadService)
         {
             _appDbContext = appDbContext;
             _response = new ResponseDto { Message = "Sorry,Something went wrong try aftersome." };
             _mapper = mapper;
             _fileUploadService = fileUploadService;
-            _messageBus = messageBus;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -65,7 +59,7 @@ namespace VMart.Services.ProductAPI.Controllers
             return _response;
         }
         [HttpPost]
-        public async Task<object> Add([FromForm]ProductDto productDto)
+        public async Task<object> Add([FromForm] ProductDto productDto)
         {
             try
             {
@@ -76,7 +70,7 @@ namespace VMart.Services.ProductAPI.Controllers
                     {
                         file = productDto.ProductImage,
                         FileName = DateTime.Now.ToString("ddMMyyyyhhmmss"),
-                       FilePath = "wwwroot/upload/productimage/" 
+                        FilePath = "wwwroot/upload/productimage/"
                     });
                     if (!fileRes.IsSuccess)
                     {
@@ -84,7 +78,7 @@ namespace VMart.Services.ProductAPI.Controllers
                         return _response;
                     }
                     data.ProductImage = fileRes.Result.ToString();
-                }                
+                }
                 var res = await _appDbContext.Products.AddAsync(data);
                 await _appDbContext.SaveChangesAsync();
                 _response.IsSuccess = true;
@@ -97,7 +91,7 @@ namespace VMart.Services.ProductAPI.Controllers
             return _response;
         }
         [HttpPut]
-        public async Task<object> Update([FromForm]ProductDto productDto)
+        public async Task<object> Update([FromForm] ProductDto productDto)
         {
             try
             {
@@ -158,13 +152,6 @@ namespace VMart.Services.ProductAPI.Controllers
                 subject = "Test RabbitMQ",
                 body = "This for testing for rabbit mq message bus."
             };
-            _messageBus.PublishMessage(new MessageBus.Models.Dto.PublishMessageDto
-            {
-                Exchange = "Email-Exchange",
-                RoutingKey = "Email-Exchange-Key",
-                Queue = "Email-Provider-Queue",
-                Message = JsonConvert.SerializeObject(emailDto)
-            });
             return _response;
         }
     }
