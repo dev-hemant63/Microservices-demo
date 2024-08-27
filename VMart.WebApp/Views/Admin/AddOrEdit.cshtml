@@ -1,1 +1,23 @@
-﻿
+﻿@model ProductAddOrEditVM
+<div class="form-group">
+    <label for="category">Category</label>
+    <select asp-for="@Model.Products.CategoryId" id="category" class="form-control">
+
+    </select>
+</div>
+<div class="form-group">
+    <label for="product">Product</label>
+    <input type="text" required class="form-control" asp-for="@Model.Products.Product_Name" id="product" name="product" placeholder="Enter product name">
+</div>
+<div class="form-group">
+    <label for="price">Price</label>
+    <input type="number" required class="form-control" asp-for="@Model.Products.Price" id="price" name="price" placeholder="Enter price" step="0.01">
+</div>
+<div class="form-group">
+    <label for="image">Image</label>
+    <input type="file" required class="form-control-file" id="image" name="image">
+</div>
+<div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" required id="description" asp-for="@Model.Products.Description" name="description" rows="3" placeholder="Enter description"></textarea>
+</div>

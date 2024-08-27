@@ -39,9 +39,9 @@
 
     validate() {
         let isValid = false;
-        $('input:required, select:required').removeClass("is-invalid");
-        $('input:required, select:required').addClass("is-valid");
-        let inputs = $('input:required,select:required');
+        $('input:required, select:required,textarea:required').removeClass("is-invalid");
+        $('input:required, select:required,textarea:required').addClass("is-valid");
+        let inputs = $('input:required,select:required,textarea:required');
 
         let filteredInputs = inputs.filter(function () {
 
@@ -165,7 +165,6 @@
             buttons: {
                 "Ok": function () {
                     callback();
-                    dialog.dialog("close");
                 },
                 "Cancel": function () {
                     dialog.dialog("close");
@@ -197,6 +196,11 @@
                 }
             }
         });
+    }
+
+    close() {
+        var dialog = $("#dialog").dialog();
+        dialog.dialog("close");
     }
 }
 const helper = new Helper();

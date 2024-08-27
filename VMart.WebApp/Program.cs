@@ -11,6 +11,7 @@ builder.Services.AddScoped<IRequestBase, RequestBase>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddHttpClient();
 var app = builder.Build();
 
