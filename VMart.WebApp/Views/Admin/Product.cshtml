@@ -11,7 +11,7 @@
         </button>
     </div>
 </div>
-<div class="table-responsive fix-table">
+<div class="table-responsive">
     <table class="table table-striped table-bordered table-sm">
         <thead>
             <tr>
@@ -34,89 +34,100 @@
                         foreach (var item in Model.Result)
                         {
                             i++;
-                                                                            <tr>
-                                                                                <td>@i</td>
-                                                                                <td></td>
-                                                                                <td>@item.Product_Name</td>
-                                                                                <td>@item.Price</td>
-                                                                                <td><img src="@item.ProductImage" alt="@item.Product_Name" /></td>
-                                                                                <td>@item.Description</td>
-                                                                                <td>
-                                                                                    <button class="btn btn-sm btn-outline-secondary" onclick="addEdit('@item.Id')">Edit</button>
-                                                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteConfirm('@item.Id')">Delete</button>
-                                                                                </td>
-                                                                            </tr>
+                            <tr>
+                                <td>@i</td>
+                                <td></td>
+                                <td>@item.Product_Name</td>
+                                <td>@item.Price</td>
+                                <td>
+                                    <img src="@item.ProductImage" style="height: 263px;width: 220px;" alt="@item.Product_Name" />
+                                </td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="addEdit('@item.Id')">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteConfirm('@item.Id')">Delete</button>
+                                </td>
+                            </tr>
                         }
                     }
                     else
                     {
-                                                                <tr>
-                                                                    <td class="text-danger" colspan="23">No Record Found!</td>
-                                                                </tr>
+                        <tr>
+                            <td class="text-danger" colspan="23">No Record Found!</td>
+                        </tr>
                     }
                 }
                 else
                 {
-                                                    <tr>
-                                                        <td class="text-danger" colspan="23">@Model.Message</td>
-                                                    </tr>
+                    <tr>
+                        <td class="text-danger" colspan="23">@Model.Message</td>
+                    </tr>
                 }
             }
         </tbody>
     </table>
 </div>
 @section Scripts {
-            <script>
-                var addEdit = (id) => {
-                    $.post('/Admin/AddOrEdit', { Id: id }).done(function (res) {
-                        helper.modal('Add Product', res, 'medium', function () { save(); })
-                    }).fail(function (xhr) {
-                        console.log(xhr.responseText);
-                        helper.alert(500, 'Server Error!')
-                    });
-                }
-                var save = (id) =>{
-                    if (!helper.validate())
-                    {
-                        helper.alert(500, 'Validation error occurred!');
-                        return false;
-                    }
-                    var formData = new FormData();
-        formData.append('Id', id);
-        formData.append('CategoryId', $('#category').val());
-        formData.append('Product_Name', $('#product').val());
-        formData.append('Price', $('#price').val());
-        formData.append('ProductImage', $('#image').prop('files')[0]);
-        formData.append('Description', $('#description').val());
-
-        $.ajax({
-            url: '/Admin/SaveProduct',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if(response.isSuccess){
-                    helper.alert(200,response.message);
-                    helper.close();
-                }
-                else{
-                    helper.alert(500,response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                // helper.alert(500,'Failed to update product:'+error);
+    <script>
+        var addEdit = (id) => {
+            $.post('/Admin/AddOrEdit', { Id: id }).done(function (res) {
+                helper.modal('Add Product', res, 'medium', function () { save(); })
+            }).fail(function (xhr) {
+                console.log(xhr.responseText);
+                helper.alert(500, 'Server Error!')
+            });
+        }
+        var save = (id) => {
+            if (!helper.validate()) {
+                helper.alert(500, 'Validation error occurred!');
+                return false;
             }
-        });
+            var formData = new FormData();
+            formData.append('Id', $('#hdnId').val());
+            formData.append('CategoryId', $('#category').val());
+            formData.append('Product_Name', $('#product').val());
+            formData.append('Price', $('#price').val());
+            formData.append('ProductImage', $('#image').prop('files')[0]);
+            formData.append('Description', $('#description').val());
 
+            $.ajax({
+                url: '/Admin/SaveProduct',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.isSuccess) {
+                        helper.alert(200, response.message);
+                        helper.close();
+                    }
+                    else {
+                        helper.alert(500, response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // helper.alert(500,'Failed to update product:'+error);
                 }
-                var deleteConfirm = (id)=>{
-                    helper.confirm('Are you sure want to delete it?', function(){
-                        deleteProduct(id);
-                    });
+            });
+
+        }
+        var deleteConfirm = (id) => {
+            helper.confirm('Are you sure want to delete it?', function () {
+                deleteProduct(id);
+            });
+        }
+        var deleteProduct = (id) => {
+            $.post('/Admin/DeleteProduct', { Id: id }).done(function (response) {
+                if (response.isSuccess) {
+                    helper.alert(200, response.message);
                 }
-                var deleteProduct = (id) => {
-                    helper.alert(200, 'Product Deleted Successfully!');
+                else {
+                    helper.alert(500, response.message);
                 }
-            </script>
+            }).fail(function (xhr) {
+                console.log(xhr.responseText);
+                helper.alert(500, 'Server Error!')
+            });
+        }
+    </script>
 }

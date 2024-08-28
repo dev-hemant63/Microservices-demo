@@ -20,7 +20,7 @@ namespace VMart.WebApp.Services
         {
             var res = await _requestBase.SendAsync<List<Products>>(new RequestDto
             {
-                Url = "https://localhost:7083/gateway/api/Product",
+                Url = "http://localhost:5250/gateway/api/Product",
                 RequestType = RequestType.GET,
                 Token = await _tokenProvider.GetToken()
             });
@@ -30,7 +30,7 @@ namespace VMart.WebApp.Services
         {
             var res = await _requestBase.SendAsync<Products>(new RequestDto
             {
-                Url = $"https://localhost:7083/gateway/api/Product/{Id}",
+                Url = $"http://localhost:5250/gateway/api/Product/{Id}",
                 RequestType = RequestType.GET,
                 Token = await _tokenProvider.GetToken()
             });
@@ -40,7 +40,7 @@ namespace VMart.WebApp.Services
         {
             var res = await _requestBase.SendAsync<Products>(new RequestDto
             {
-                Url = $"https://localhost:7083/gateway/api/Product/{Id}",
+                Url = $"http://localhost:5250/gateway/api/Product/{Id}",
                 RequestType = RequestType.DELETE,
                 Token = await _tokenProvider.GetToken()
             });
@@ -56,25 +56,28 @@ namespace VMart.WebApp.Services
             multipartContent.Add(new StringContent(addProductDto.Price.ToString()), nameof(addProductDto.Price));
             multipartContent.Add(new StringContent(addProductDto.Description.ToString()), nameof(addProductDto.Description));
 
-            using (var stream = addProductDto.ProductImage.OpenReadStream())
+            if (addProductDto.ProductImage != null)
             {
-                using (var reader = new BinaryReader(stream))
+                using (var stream = addProductDto.ProductImage.OpenReadStream())
                 {
-                    var fileContent = new ByteArrayContent(reader.ReadBytes((int)stream.Length));
-                    fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream"); // or the actual MIME type of the file
-                    fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                    using (var reader = new BinaryReader(stream))
                     {
-                        Name = "\"ProductImage\"",
-                        FileName = $"\"{addProductDto.ProductImage.FileName}\""
-                    };
+                        var fileContent = new ByteArrayContent(reader.ReadBytes((int)stream.Length));
+                        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream"); // or the actual MIME type of the file
+                        fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                        {
+                            Name = "\"ProductImage\"",
+                            FileName = $"\"{addProductDto.ProductImage.FileName}\""
+                        };
 
-                    multipartContent.Add(fileContent, "ProductImage");
+                        multipartContent.Add(fileContent, "ProductImage");
+                    }
                 }
             }
             var res = await _requestBase.SendAsync<object>(new RequestDto
             {
-                Url = "https://localhost:7083/gateway/api/Product",
-                RequestType = RequestType.POST,
+                Url = "http://localhost:5250/gateway/api/Product",
+                RequestType = addProductDto.Id==0?RequestType.POST:RequestType.PUT,
                 Token = await _tokenProvider.GetToken(),
                 RequestBody = multipartContent
             });

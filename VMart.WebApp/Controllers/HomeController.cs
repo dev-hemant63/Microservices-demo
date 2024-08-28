@@ -13,11 +13,13 @@ namespace VMart.WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
         private readonly IAuthServices _authServices;
-        public HomeController(ILogger<HomeController> logger, IProductService productService, IAuthServices authServices)
+        private readonly ICategoryService _categoryService;
+        public HomeController(ILogger<HomeController> logger, IProductService productService, IAuthServices authServices, ICategoryService categoryService)
         {
             _logger = logger;
             _productService = productService;
             _authServices = authServices;
+            _categoryService = categoryService;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -89,7 +91,12 @@ namespace VMart.WebApp.Controllers
         {
             return View();
         }
-
+        [HttpPost]
+        public async Task<IActionResult> GetCategory()
+        {
+            var res = await _categoryService.GetAsync();
+            return Json(res);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

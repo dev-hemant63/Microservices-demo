@@ -15,14 +15,7 @@
         "Post",
         "Put",
         "Delete"
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "AddHeadersToRequest": {
-        "Authorization": "Bearer {Token}"
-      }
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/category/{id}",
@@ -43,6 +36,6 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7083"
+    "BaseUrl": "http://localhost:5250"
   }
 }

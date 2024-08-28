@@ -18,7 +18,7 @@ namespace VMart.WebApp.Services
         {
             var res = await _requestBase.SendAsync<IEnumerable<ProductCategory>>(new RequestDto
             {
-                Url = "https://localhost:7083/gateway/api/category",
+                Url = "http://localhost:5250/gateway/api/category",
                 RequestType = RequestType.GET,
                 Token = await _tokenProvider.GetToken()
             });

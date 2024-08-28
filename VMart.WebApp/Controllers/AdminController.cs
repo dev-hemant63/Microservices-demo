@@ -28,7 +28,10 @@ namespace VMart.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrEdit(int Id)
         {
-            var model = new ProductAddOrEditVM();
+            var model = new ProductAddOrEditVM
+            {
+                Products = new Products()
+            };
             if (Id != 0)
             {
                 var res = await _productService.GetByIdAsync(Id);
@@ -48,6 +51,12 @@ namespace VMart.WebApp.Controllers
         public async Task<IActionResult> SaveProduct(AddProductDto addProductDto)
         {
             var res = await _productService.AddAsync(addProductDto);
+            return Json(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteProduct(int Id)
+        {
+            var res = await _productService.DeleteAsync(Id);
             return Json(res);
         }
     }
