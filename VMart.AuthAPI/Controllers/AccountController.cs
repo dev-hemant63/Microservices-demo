@@ -89,6 +89,7 @@ namespace VMart.AuthAPI.Controllers
                         var userRole = await _userManager.GetRolesAsync(user);
                         List<Claim> claims = new List<Claim>
                         {
+                            new Claim("UserId",user.Id.ToString() ?? ""),
                             new Claim(ClaimTypes.Name,user.Name ?? ""),
                             new Claim(ClaimTypes.MobilePhone,user.PhoneNumber ?? ""),
                             new Claim(ClaimTypes.Email,user.Email ?? ""),

@@ -59,5 +59,15 @@ namespace VMart.WebApp.Controllers
             var res = await _productService.DeleteAsync(Id);
             return Json(res);
         }
+        [HttpGet]
+        public async Task<IActionResult> Category()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddOrEditCat(int Id)
+        {
+            return PartialView();
+        }
     }
 }
