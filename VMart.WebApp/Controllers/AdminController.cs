@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VMart.WebApp.Models;
 using VMart.WebApp.Models.Dto;
 using VMart.WebApp.Services.IServices;
 
 namespace VMart.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IProductService _productService;
@@ -62,12 +64,38 @@ namespace VMart.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Category()
         {
-            return View();
+            var catRes = await _categoryService.GetAsync();
+            return View(catRes);
         }
         [HttpPost]
         public async Task<IActionResult> AddOrEditCat(int Id)
         {
-            return PartialView();
+            var category = new ProductCategory();
+            if (Id != 0)
+            {
+                var catRes = await _categoryService.GetByIdAsync(Id);
+                if (catRes.IsSuccess)
+                {
+                    category = catRes.Result;
+                }
+            }
+            return PartialView(category);
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveCategory(string Name, int Id)
+        {
+            var catRes = await _categoryService.SaveAsync(new CategoryDto
+            {
+                Name = Name,
+                Id = Id
+            });
+            return Json(catRes);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(int Id)
+        {
+            var res = await _categoryService.DeleteAsync(Id);
+            return Json(res);
         }
     }
 }

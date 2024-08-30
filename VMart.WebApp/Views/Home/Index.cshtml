@@ -16,7 +16,6 @@
     <script>
         $(document).ready(function () {
             loadProducts();
-            loadCategory();
         });
         const loadProducts = () => {
             $.post('/Home/GetProduct').done(function (res) {
@@ -24,12 +23,12 @@
                     let _html = res.result.map((v, i) => {
                         return `<div class="col-sm-3 mb-3">
                                 <div class="card">
-                                          <img class="card-img-top" style="height: 263px;width: 220px;" src="${v.productImage}" alt="Card image cap">
+                                          <img class="card-img-top" style="height: 263px;" src="${v.productImage}" alt="Card image cap">
           <div class="card-body">
                                                     <h5 class="card-title">${v.product_Name} ₹${v.price}</h5>
                             <p class="card-text">${v.description}</p>
-                    <a href="javascript:void(0)" class="btn btn-info">ADD TO CART</a>
-                    <a href="javascript:void(0)" class="btn btn-warning">BUY NOW</a>
+                                            <a href="javascript:void(0)" class="btn btn-info" onclick="addToCart('${v.id}','${v.product_Name}')">ADD TO CART</a>
+                    <a href="/home/cart" class="btn btn-warning">BUY NOW</a>
           </div>
         </div></div>`;
                     });
@@ -46,19 +45,6 @@
                 console.log(xhr);
             });
         }
-        var loadCategory = () =>{
-            $.post('/Home/GetCategory').done(function(res){
-                if(res.isSuccess){
-                    var _menu = res.result.map((v, i) => {
-                        return `<a class="py-2 d-none d-md-inline-block" href="/home/product/${v.id}">${v.name}</a>`;
-                    });
-                    $('#menu').append(_menu);
-                }
-                $('#menu').append(`<a class="py-2 d-none d-md-inline-block" href="/Home/Register">Registered</a>
-                            <a class="py-2 d-none d-md-inline-block" href="/Home/Login">Login</a> `)
-            }).fail(function (xhr) {
-                console.log(xhr);
-            });
-        }
+        
     </script>
 }

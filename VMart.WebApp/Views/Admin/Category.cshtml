@@ -1,6 +1,8 @@
-﻿@{
+﻿@using VMart.WebApp.Models.Dto
+@{
     Layout = "_LayoutAdmin";
 }
+@model ResponseDto<IEnumerable<ProductCategory>>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h1 class="h2">Category</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -20,6 +22,33 @@
             </tr>
         </thead>
         <tbody>
+            @{
+                if (Model.IsSuccess)
+                {
+                    int i = 0;
+                    foreach (var item in Model.Result)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Name</td>
+                            <td>
+                                <img src="" />
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-info" onclick="addEdit('@item.Id')">Edit</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteConfirm('@item.Id')">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9">@Model.Message</td>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
 </div>
@@ -27,8 +56,41 @@
     <script>
         var addEdit = (id) => {
             $.post('/Admin/AddOrEditCat', { Id: id }).done(function (res) {
-                helper.modal('Add Category', res, 'medium', function () { save(); })
+                helper.modal('Add Category', res, 'medium', function () { saveCategory(); })
             }).fail(function (xhr) {
+                console.log(xhr.responseText);
+                helper.alert(500, 'Server Error!')
+            });
+        }
+        var deleteConfirm = (id) => {
+            helper.confirm('Are you sure want to delete it?', function () {
+                deleteCategory(id);
+            });
+        }
+        var deleteCategory = (id) => {
+            $.post('/Admin/DeleteCategory', { Id: id }).done(function (response) {
+                if (response.isSuccess) {
+                    helper.alert(200, response.message);
+                    window.location.reload();
+                }
+                else {
+                    helper.alert(500, response.message);
+                }
+            }).fail(function (xhr) {
+                console.log(xhr.responseText);
+                helper.alert(500, 'Server Error!')
+            });
+        }
+        var saveCategory = () => {
+            $.post('/Admin/SaveCategory', { Name: $('#name').val(), Id: $('#hdnId').val() }).done(function (response) {
+                if (response.isSuccess) {
+                    helper.alert(200, response.message);
+                    window.location.reload();
+                }
+                else {
+                    helper.alert(500, response.message);
+                }
+            }).fail((xhr) => {
                 console.log(xhr.responseText);
                 helper.alert(500, 'Server Error!')
             });

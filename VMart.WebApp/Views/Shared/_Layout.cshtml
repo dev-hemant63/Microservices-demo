@@ -13,15 +13,15 @@
     <link href="~/css/jquery.toast.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
     <style>
-        .navbar a{
-            color:white !important
+        .navbar a {
+            color: white !important
         }
     </style>
 </head>
 <body>
     <nav class="site-header sticky-top py-1" style="z-index: 99;">
         <div class="container d-flex flex-column flex-md-row justify-content-between navbar" id="menu">
-            <a class="py-2" href="#">
+            <a class="py-2" href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
             </a>
         </div>
@@ -86,5 +86,53 @@
     <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js" asp-append-version="true"></script>
     <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            loadCategory();
+        });
+        var addToCart = (productId,productName) => {
+            var cartDetails = localStorage.getItem('cart-detail');
+            if (cartDetails == null) {
+                var detailsArr = [];
+                var obj = {
+                    ProductId: productId,
+                    Qty: 1,
+                    ProductName: productName
+                };
+                detailsArr.push(obj);
+                localStorage.setItem('cart-detail', JSON.stringify(detailsArr));
+            } else {
+                var detailsArr = JSON.parse(cartDetails);
+                var product = detailsArr.find(p => p.ProductId === productId);
+
+                if (product) {
+                    product.Qty += 1;
+                } else {
+                    var obj = {
+                        ProductId: productId,
+                        Qty: 1,
+                        ProductName: productName
+                    };
+                    detailsArr.push(obj);
+                }
+                localStorage.setItem('cart-detail', JSON.stringify(detailsArr));
+            }
+            helper.alert(200, 'Add to cart successfully.');
+        };
+        var loadCategory = () => {
+            $.post('/Home/GetCategory').done(function (res) {
+                if (res.isSuccess) {
+                    var _menu = res.result.map((v, i) => {
+                        return `<a class="py-2 d-none d-md-inline-block" href="/home/product/${v.id}">${v.name}</a>`;
+                    });
+                    $('#menu').append(_menu);
+                }
+                $('#menu').append(`<a class="py-2 d-none d-md-inline-block" href="/Home/Register">Registered</a>
+                                            <a class="py-2 d-none d-md-inline-block" href="/Home/Login">Login</a> <a class="py-2 d-none d-md-inline-block" href="/Home/Cart">Shopping Cart</a> `)
+            }).fail(function (xhr) {
+                console.log(xhr);
+            });
+        }
+    </script>
 </body>
 </html>

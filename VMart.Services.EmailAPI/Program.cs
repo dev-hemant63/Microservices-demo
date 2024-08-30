@@ -1,3 +1,4 @@
+using VMart.Services.EmailAPI.Extentions;
 using VMart.Services.EmailAPI.Services;
 using VMart.Services.EmailAPI.Services.IService;
 
@@ -18,6 +19,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseRabbitMQConsumer();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

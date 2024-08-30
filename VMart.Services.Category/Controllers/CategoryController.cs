@@ -36,7 +36,7 @@ namespace VMart.Services.Category.Controllers
             }
             return _response;
         }
-        [HttpGet("Id")]
+        [HttpGet("{Id}")]
         public async Task<object> Get(int Id)
         {
             try
@@ -85,7 +85,7 @@ namespace VMart.Services.Category.Controllers
             }
             return _response;
         }
-        [HttpDelete("Id")]
+        [HttpDelete("{Id}")]
         public async Task<object> Delete(int Id)
         {
             try

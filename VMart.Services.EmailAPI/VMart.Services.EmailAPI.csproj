@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extentions\" />
+    <ProjectReference Include="..\VMart.MessageBus\VMart.MessageBus.csproj" />
   </ItemGroup>
 
 </Project>

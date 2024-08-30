@@ -40,11 +40,16 @@ namespace VMart.Services.Order.Controllers
                     OrderNo = orderId,
                     UserId = User.GetLogingId<int>(),
                 });
-                _appDbContext.SaveChangesAsync();
-                var order = _appDbContext.Orders.Where(x => x.OrderId.Equals(orderId)).FirstOrDefault();
+                await _appDbContext.SaveChangesAsync();
+                var order = _appDbContext.Orders.ToList().Where(x => x.OrderNo.Equals(orderId)).FirstOrDefault();
                 if (order != null)
                 {
                     var orderDetails = _mapper.Map<List<OrderDetails>>(orderDto.Products);
+                    foreach (var item in orderDetails)
+                    {
+                        item.OrderId = order.OrderId;
+                        item.EntryAt = DateTime.Now;
+                    }
                     await _appDbContext.OrderDetails.AddRangeAsync(orderDetails);
                     await _appDbContext.SaveChangesAsync();
 
