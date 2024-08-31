@@ -11,10 +11,14 @@ namespace VMart.WebApp.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-        public AdminController(IProductService productService, ICategoryService categoryService)
+        private readonly IOrderService _orderService;
+        private readonly IAuthServices _authServices;
+        public AdminController(IProductService productService, ICategoryService categoryService, IOrderService orderService, IAuthServices authServices)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _orderService = orderService;
+            _authServices = authServices;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -96,6 +100,24 @@ namespace VMart.WebApp.Controllers
         {
             var res = await _categoryService.DeleteAsync(Id);
             return Json(res);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Order()
+        {
+            var list = await _orderService.GetAsync();
+            return View(list);
+        }
+        [HttpPost]
+        public async Task<IActionResult> OrderDetails(int orderId)
+        {
+            var list = await _orderService.GetDetailsAsync(orderId);
+            return PartialView(list);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Customer()
+        {
+            var list = await _authServices.GetAppUsers();
+            return View(list);
         }
     }
 }

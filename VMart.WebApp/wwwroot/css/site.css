@@ -32,3 +32,10 @@ body {
     border-color: #f44336 !important;
     color: #fff !important;
 }
+.img-banner {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    padding-top: 3px;
+    height: 30rem;
+}

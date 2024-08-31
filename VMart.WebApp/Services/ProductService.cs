@@ -36,6 +36,16 @@ namespace VMart.WebApp.Services
             });
             return res;
         }
+        public async Task<ResponseDto<List<Products>>> GetByCategoryIdAsync(int categoryId)
+        {
+            var res = await _requestBase.SendAsync<List<Products>>(new RequestDto
+            {
+                Url = $"http://localhost:5250/gateway/api/Product/category/{categoryId}",
+                RequestType = RequestType.GET,
+                Token = await _tokenProvider.GetToken()
+            });
+            return res;
+        }
         public async Task<ResponseDto<Products>> DeleteAsync(int Id)
         {
             var res = await _requestBase.SendAsync<Products>(new RequestDto

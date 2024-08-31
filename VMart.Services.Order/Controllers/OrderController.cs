@@ -24,7 +24,7 @@ namespace VMart.Services.Order.Controllers
         public OrderController(AppDbContext appDbContext, IMapper mapper, IMessageBus messageBus)
         {
             _appDbContext = appDbContext;
-            _response = new ResponseDto { Message = "Sorry,Somethig went wrong try after sometime."};
+            _response = new ResponseDto { Message = "Sorry,Somethig went wrong try after sometime." };
             _mapper = mapper;
             _messageBus = messageBus;
         }
@@ -56,7 +56,7 @@ namespace VMart.Services.Order.Controllers
                     //send order eamil
                     var emailDto = new
                     {
-                        to= User.GetLoginEmail(),
+                        to = User.GetLoginEmail(),
                         Subject = "Order Place Successfully",
                         Body = $"Dear {User.GetLoginName()},\r\n\r\nThank you for shopping with VMart!\r\n\r\nWe are pleased to confirm that your order {orderId} has been successfully placed. Below are the details of your order:\r\n\r\nOrder Summary:\r\n\r\n1. Order Number: {orderId}\r\n2. Order Date: {DateTime.Now}"
                     };
@@ -72,6 +72,38 @@ namespace VMart.Services.Order.Controllers
                     _response.Message = "Order Placed Successfully!";
                     _response.IsSuccess = true;
                 }
+            }
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message;
+            }
+            return Ok(_response);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var list = _appDbContext.Orders.ToList();
+                _response.IsSuccess = true;
+                _response.Message = "Success";
+                _response.Result = list;
+            }
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message;
+            }
+            return Ok(_response);
+        }
+        [HttpGet("{OrderId}")]
+        public async Task<IActionResult> GetDetails(int OrderId)
+        {
+            try
+            {
+                var list = _appDbContext.OrderDetails.Where(x=>x.OrderId == OrderId).ToList();
+                _response.IsSuccess = true;
+                _response.Message = "Success";
+                _response.Result = list;
             }
             catch (Exception ex)
             {

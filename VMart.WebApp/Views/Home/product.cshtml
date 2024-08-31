@@ -1,0 +1,67 @@
+﻿@using VMart.WebApp.Models.Dto
+@model ResponseDto<List<Products>>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .cart-container {
+        margin-top: 30px;
+    }
+
+    .table thead th {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .btn-remove {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .btn-remove:hover {
+            background-color: #c82333;
+            color: white;
+        }
+
+    .btn-checkout {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .btn-checkout:hover {
+            background-color: #218838;
+            color: white;
+        }
+</style>
+<div class="container cart-container">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Shopping Cart</h1>
+    </div>
+
+    <div class="row">
+        @{
+            if (Model.Result.Any())
+            {
+                foreach (var item in Model.Result)
+                {
+                    <div class="col-sm-3 mb-3">
+                        <div class="card">
+                            <img class="card-img-top" style="height: 263px;" src="@item.ProductImage" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Product_Name ₹@item.Price</h5>
+                                <p class="card-text">@item.Description</p>
+                                <a href="javascript:void(0)" class="btn btn-info" onclick="addToCart('@item.Id','@item.Product_Name')">ADD TO CART</a>
+                                <a href="/home/cart" class="btn btn-warning">BUY NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>

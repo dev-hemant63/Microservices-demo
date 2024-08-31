@@ -21,6 +21,7 @@ namespace VMart.Services.Category.Controllers
             _response = new ResponseDto { Message = "Sorry,Something went wrong try aftersome." };
         }
         [HttpGet]
+        [AllowAnonymous]
         public async Task<object> Get()
         {
             try

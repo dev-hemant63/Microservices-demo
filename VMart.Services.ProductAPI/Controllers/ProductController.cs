@@ -58,6 +58,23 @@ namespace VMart.Services.ProductAPI.Controllers
             }
             return _response;
         }
+        [HttpGet("category/{categoryId}")]
+        [AllowAnonymous]
+        public async Task<object> GetCategoryWise(int categoryId)
+        {
+            try
+            {
+                var res = _appDbContext.Products.Where(x => x.CategoryId == categoryId);
+                _response.IsSuccess = true;
+                _response.Message = "Request Completed Successfully.";
+                _response.Result = res;
+            }
+            catch (Exception ex)
+            {
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
         [HttpPost]
         public async Task<object> Add([FromForm] ProductDto productDto)
         {

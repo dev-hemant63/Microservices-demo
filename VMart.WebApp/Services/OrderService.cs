@@ -1,4 +1,5 @@
-﻿using VMart.WebApp.Models.Dto;
+﻿using VMart.WebApp.Models;
+using VMart.WebApp.Models.Dto;
 using VMart.WebApp.Services.IServices;
 using VMart.WebApp.Utility;
 
@@ -21,6 +22,26 @@ namespace VMart.WebApp.Services
                 RequestType = RequestType.POST,
                 Token = await _tokenProvider.GetToken(),
                 RequestBody = orderDto
+            });
+            return res;
+        }
+        public async Task<ResponseDto<List<Orders>>> GetAsync()
+        {
+            var res = await _requestBase.SendAsync<List<Orders>>(new RequestDto
+            {
+                Url = "http://localhost:5250/gateway/api/order",
+                RequestType = RequestType.GET,
+                Token = await _tokenProvider.GetToken()
+            });
+            return res;
+        }
+        public async Task<ResponseDto<List<OrderDetails>>> GetDetailsAsync(int orderId)
+        {
+            var res = await _requestBase.SendAsync<List<OrderDetails>>(new RequestDto
+            {
+                Url = $"http://localhost:5250/gateway/api/order/{orderId}",
+                RequestType = RequestType.GET,
+                Token = await _tokenProvider.GetToken()
             });
             return res;
         }

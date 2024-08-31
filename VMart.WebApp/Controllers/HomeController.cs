@@ -42,6 +42,17 @@ namespace VMart.WebApp.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    return Redirect("/Admin/Index");
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+            }
             return View(new LoginRequestDto { });
         }
         [HttpPost]
@@ -143,8 +154,14 @@ namespace VMart.WebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        [HttpGet("home/product/{Id}")]
+        public async Task<IActionResult> product(int Id)
+        {
+            var res = await _productService.GetByCategoryIdAsync(Id);
+            return View(res);
+        }
         [HttpGet]
-        public async Task<IActionResult> Logout(string returnUrl = "/Account/Login")
+        public async Task<IActionResult> Logout(string returnUrl = "/Home/Login")
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");

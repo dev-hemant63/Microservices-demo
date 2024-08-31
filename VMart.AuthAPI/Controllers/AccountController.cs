@@ -156,5 +156,21 @@ namespace VMart.AuthAPI.Controllers
             }
             return Ok(_responseDto);
         }
+        [HttpGet(nameof(GetList))]
+        public async Task<IActionResult> GetList()
+        {
+            try
+            {
+                var list = _userManager.Users.Where(x => x.Id != 1005).ToList();
+                _responseDto.IsSuccess = true;
+                _responseDto.Message = "Success";
+                _responseDto.Result = list;
+            }
+            catch (Exception ex)
+            {
+                _responseDto.Message = ex.Message;
+            }
+            return Ok(_responseDto);
+        }
     }
 }

@@ -1,7 +1,24 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Product/{id}",
+      "DownstreamPathTemplate": "/api/account/{url}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7039
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/api/account/{url}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Product/{url}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -9,7 +26,7 @@
           "Port": 7127
         }
       ],
-      "UpstreamPathTemplate": "/gateway/api/Product/{id}",
+      "UpstreamPathTemplate": "/gateway/api/Product/{url}",
       "UpstreamHttpMethod": [
         "Get",
         "Post",
@@ -35,7 +52,7 @@
       ]
     },
     {
-      "DownstreamPathTemplate": "/api/order/{id}",
+      "DownstreamPathTemplate": "/{orderurl}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -43,7 +60,7 @@
           "Port": 7000
         }
       ],
-      "UpstreamPathTemplate": "/gateway/api/order/{id}",
+      "UpstreamPathTemplate": "/gateway/{orderurl}",
       "UpstreamHttpMethod": [
         "Get",
         "Post",

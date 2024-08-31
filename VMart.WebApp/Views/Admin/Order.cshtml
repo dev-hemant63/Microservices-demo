@@ -1,0 +1,58 @@
+﻿@using VMart.WebApp.Models.Dto
+@{
+    Layout = "_LayoutAdmin";
+}
+@model ResponseDto<List<Orders>>
+<h2>Orders</h2>
+<div class="table-responsive">
+    <table class="table table-striped table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>OrderId</th>
+                <th>OrderNo</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.IsSuccess)
+                {
+                    int i = 0;
+                    foreach (var item in Model.Result)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.OrderId</td>
+                            <td>@item.OrderNo</td>
+                            <td>@item.OrderDate</td>
+                            <td>
+                                <button class="btn btn-sm btn-info" onclick="viewDetails('@item.OrderId')">View</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="34">@Model.Message</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <script>
+        var viewDetails = (id) => {
+            $.post('/Admin/OrderDetails', { orderId: id }).done(function (res) {
+                helper.modal('Order Details', res, 'medium', function () { helper.close(); })
+            }).fail(function (xhr) {
+                console.log(xhr.responseText);
+                helper.alert(500, 'Server Error!')
+            });
+        }
+    </script>
+}

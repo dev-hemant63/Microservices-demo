@@ -9,5 +9,6 @@ namespace VMart.WebApp.Services.IServices
         Task<ResponseDto<object>> AddAsync(AddProductDto addProductDto);
         Task<ResponseDto<Products>> GetByIdAsync(int Id);
         Task<ResponseDto<Products>> DeleteAsync(int Id);
+        Task<ResponseDto<List<Products>>> GetByCategoryIdAsync(int categoryId);
     }
 }
